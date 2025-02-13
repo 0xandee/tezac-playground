@@ -1,10 +1,12 @@
 mod types;
 mod test;
+mod trading;
 
 use dep::aztec::macros::aztec;
 
 #[aztec]
-contract NFT {
+pub contract NFT {
+    use crate::types::listing_note::ListingNote;
     use crate::types::nft_note::NFTNote;
     use dep::authwit::auth::{
         assert_current_call_valid_authwit, assert_current_call_valid_authwit_public,
@@ -28,6 +30,7 @@ contract NFT {
     };
     use dep::compressed_string::FieldCompressedString;
     use std::meta::derive;
+    // use router::utils::privately_check_timestamp;
 
     #[derive(Serialize)]
     #[event]
@@ -35,6 +38,24 @@ contract NFT {
         from: AztecAddress,
         to: AztecAddress,
         token_id: Field,
+    }
+
+    #[derive(Serialize)]
+    #[event]
+    struct ListingCreated {
+        seller: AztecAddress,
+        token_id: Field,
+        price: Field,
+        expiry: Field,
+    }
+
+    #[derive(Serialize)]
+    #[event]
+    struct ListingPurchased {
+        buyer: AztecAddress,
+        seller: AztecAddress,
+        token_id: Field,
+        price: Field,
     }
 
     #[storage]
@@ -45,6 +66,8 @@ contract NFT {
         private_nfts: Map<AztecAddress, PrivateSet<NFTNote, Context>, Context>,
         nft_exists: Map<Field, PublicMutable<bool, Context>, Context>,
         public_owners: Map<Field, PublicMutable<AztecAddress, Context>, Context>,
+        private_listings: Map<AztecAddress, PrivateSet<ListingNote, Context>, Context>,
+        listing_nonces: Map<Field, PublicMutable<Field, Context>, Context>,
     }
 
     #[public]
@@ -348,4 +371,31 @@ contract NFT {
         let page_limit_reached = notes.len() == options.limit;
         (owned_nft_ids, page_limit_reached)
     }
+
+    #[private]
+    fn create_listing(token_id: Field, price: Field, expiry: Field) {
+        let price_int = price as u64;
+        assert(price_int > 0, "Price must be positive");
+        let seller = context.msg_sender();
+        
+        // Verify seller owns the NFT
+        let nft = storage.private_nfts;
+        let notes = nft.at(seller).pop_notes(
+            NoteGetterOptions::new()
+                .select(NFTNote::properties().token_id, Comparator.EQ, token_id)
+                .set_limit(1)
+        );
+        assert(notes.len() == 1, "Seller does not own this NFT");
+
+        // Create and store listing
+        // let nonce = storage.listing_nonces.at(token_id).read();
+        let private_nft = storage.private_listings;
+        let mut listing = ListingNote::new(token_id, price, seller, expiry);
+        private_nft.at(seller).insert(&mut listing)
+        .emit(
+            encode_and_encrypt_note(&mut context, seller, seller)
+        );
+        // storage.listing_nonces.at(token_id).write(nonce + 1);
+    }
+
 }

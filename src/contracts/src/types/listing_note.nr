@@ -11,42 +11,17 @@ use dep::aztec::{
     keys::getters::{get_nsk_app, get_public_keys},
 };
 
-
-#[derive(Serialize)]
-#[event]
-pub struct NFTListing {
-    token_id: Field,
-    price: Field,
-    seller: AztecAddress,
-    active: bool,
-}
-
-#[derive(Serialize)]
-struct PrivateListing {
-    token_id: Field,
-    price: Field,
-    seller: AztecAddress,
-    active: bool,
-    nonce: Field,
-}
-
-
 #[partial_note(quote {token_id, price})]
 pub struct ListingNote {
-    // The NFT token ID being listed
     token_id: Field,
-    // Price in base currency (e.g. ETH)
     price: Field,
-    // The seller's address
     seller: AztecAddress,
-    // The listing expiration timestamp
-    expiry: u64,
-    // Randomness for privacy
+    expiry: Field,
     randomness: Field,
 }
 
 impl ListingNote {
-    pub fn new(token_id: Field, price: Field, seller: AztecAddress, expiry: u64) -> Self {
+    pub fn new(token_id: Field, price: Field, seller: AztecAddress, expiry: Field) -> Self {
         let randomness = unsafe { random() };
         ListingNote {
             token_id,
@@ -58,9 +33,10 @@ impl ListingNote {
         }
     }
 
-    pub fn is_expired(self, current_time: u64) -> bool {
-    let expiry_int = self.expiry;
-    current_time > expiry_int
+    pub fn is_expired(self, current_time: Field) -> bool {
+    let expiry_int = self.expiry as u64;
+    let current_time_int = current_time as u64;
+    current_time_int > expiry_int
     }
 }
 
@@ -86,5 +62,13 @@ impl NullifiableNote for ListingNote {
             [note_hash_for_nullify, secret],
             GENERATOR_INDEX__NOTE_NULLIFIER as Field,
         )
+    }
+}
+
+impl Eq for ListingNote {
+    fn eq(self, other: Self) -> bool {
+        (self.token_id == other.token_id)
+            & (self.seller == other.seller)
+            & (self.randomness == other.randomness)
     }
 }
