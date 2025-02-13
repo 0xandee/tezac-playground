@@ -16,28 +16,28 @@ pub struct ListingNote {
     token_id: Field,
     price: Field,
     seller: AztecAddress,
-    expiry: Field,
+    isSold: bool,
     randomness: Field,
 }
 
 impl ListingNote {
-    pub fn new(token_id: Field, price: Field, seller: AztecAddress, expiry: Field) -> Self {
+    pub fn new(token_id: Field, price: Field, seller: AztecAddress, isSold: bool) -> Self {
         let randomness = unsafe { random() };
         ListingNote {
             token_id,
             price,
             seller,
             randomness,
-            expiry,
+            isSold,
             header: NoteHeader::empty()
         }
     }
 
-    pub fn is_expired(self, current_time: Field) -> bool {
-    let expiry_int = self.expiry as u64;
-    let current_time_int = current_time as u64;
-    current_time_int > expiry_int
-    }
+    // pub fn is_expired(self, current_time: Field) -> bool {
+    // let expiry_int = self.expiry as u64;
+    // let current_time_int = current_time as u64;
+    // current_time_int > expiry_int
+    // }
 }
 
 impl NullifiableNote for ListingNote {
