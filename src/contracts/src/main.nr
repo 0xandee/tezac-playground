@@ -4,7 +4,8 @@ mod test;
 use dep::aztec::macros::aztec;
 
 #[aztec]
-pub contract NFT {
+contract NFT {
+    use token::Token;
     use crate::types::listing_note::ListingNote;
     use crate::types::nft_note::NFTNote;
     use dep::authwit::auth::{
@@ -66,7 +67,8 @@ pub contract NFT {
         nft_exists: Map<Field, PublicMutable<bool, Context>, Context>,
         public_owners: Map<Field, PublicMutable<AztecAddress, Context>, Context>,
         private_listings: Map<AztecAddress, PrivateSet<ListingNote, Context>, Context>,
-        listing_nonces: Map<Field, PublicMutable<Field, Context>, Context>,
+        // payment_token: AztecAddress, // Token used for payment (e.g. DAI)
+        // listing_nonces: Map<Field, PublicMutable<Field, Context>, Context>,
     }
 
     #[public]
@@ -375,11 +377,12 @@ pub contract NFT {
     fn create_listing(token_id: Field, price: Field) {
         let price_int = price as u64;
         assert(price_int > 0, "Price must be positive");
+        assert(token_id != 0, "zero token ID not supported");
         let seller = context.msg_sender();
         
         // Verify seller owns the NFT
         let nft = storage.private_nfts;
-        let notes = nft.at(seller).pop_notes(
+        let notes = nft.at(seller).get_notes(
             NoteGetterOptions::new()
                 .select(NFTNote::properties().token_id, Comparator.EQ, token_id)
                 .set_limit(1)
@@ -401,6 +404,7 @@ pub contract NFT {
     #[private]
     fn purchase_listing(seller: AztecAddress, token_id: Field, price: Field) {
         let buyer = context.msg_sender();
+        assert(token_id != 0, "zero token ID not supported");
         // privately_check_timestamp(Comparator.LT, config.deadline, &mut context);
 
         // Find and verify listing
@@ -417,20 +421,64 @@ pub contract NFT {
         let listing_price_int = listing.price as u64;
         assert(price_int >= listing_price_int, "Insufficient funds");
 
-        // Transfer NFT
+        // Handle payment
+        let amount = U128::from_integer(price);
+        Token::at(storage.payment_token)
+        .transfer_in_private(seller, buyer, amount, 0)
+        .call(&mut context);
+
+        // Transfer the NFT and its ownership
         let nft = NFT::at(context.this_address());
         nft.transfer_in_private(seller, buyer, token_id, 0).call(&mut context);
 
+        // Update listing as sold
+        // Though
+        let mut updated_listing = listing;
+        updated_listing.isSold = true;
+
         NFT::at(context.this_address())
         ._publish_ownership_changed(buyer, seller, token_id, listing.price)
-            .enqueue(&mut context);
+        .enqueue(&mut context);
     }
 
     #[public]
     #[internal]
-        fn _publish_ownership_changed(buyer: AztecAddress, seller: AztecAddress, token_id: Field, price: Field) {
-            // To Do
-            // ListingPurchased { buyer, seller, token_id, price }.emit(encode_event(&mut context))
+    fn _publish_ownership_changed(buyer: AztecAddress, seller: AztecAddress, token_id: Field, price: Field) {
+        // To Do
+        // ListingPurchased { buyer, seller, token_id, price }.emit(encode_event(&mut context))
+    }
+
+    #[private]
+    fn cancel_listing(token_id: Field) {
+        assert(token_id != 0, "zero token ID not supported");
+        let seller = context.msg_sender();
+        
+        // Find and remove listing
+        // pop_notes() is effecient than remove()
+        let notes = storage.private_listings.at(seller).pop_notes(
+            NoteGetterOptions::new()
+                .select(ListingNote::properties().token_id, Comparator.EQ, token_id)
+                .set_limit(1)
+        );
+        assert(notes.len() == 1, "Listing not found");
+    }
+
+    // #[private]
+    // #[view]
+    unconstrained fn get_listings(seller: AztecAddress, page_index: u32) -> pub ([Field; MAX_NOTES_PER_PAGE], bool) {
+        let offset = page_index * MAX_NOTES_PER_PAGE;
+        let mut options  = NoteViewerOptions::new();
+        let notes = storage.private_listings.at(seller).view_notes(options.set_offset(offset));
+
+        let mut listing_ids = [0; MAX_NOTES_PER_PAGE];
+        for i in 0..options.limit {
+            if i < notes.len() {
+                listing_ids[i] = notes.get_unchecked(i).token_id;
+            }
+        }
+
+        let page_limit_reached = notes.len() == options.limit;
+        (listing_ids, page_limit_reached)
     }
 
 }
