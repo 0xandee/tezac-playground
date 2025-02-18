@@ -67,7 +67,7 @@ contract NFT {
         nft_exists: Map<Field, PublicMutable<bool, Context>, Context>,
         public_owners: Map<Field, PublicMutable<AztecAddress, Context>, Context>,
         private_listings: Map<AztecAddress, PrivateSet<ListingNote, Context>, Context>,
-        // payment_token: AztecAddress, // Token used for payment (e.g. DAI)
+        payment_token: PublicImmutable<AztecAddress, Context>, // Token used for payment (e.g. DAI)
         // listing_nonces: Map<Field, PublicMutable<Field, Context>, Context>,
     }
 
@@ -391,10 +391,10 @@ contract NFT {
 
         // Create and store listing
         // let nonce = storage.listing_nonces.at(token_id).read();
-        let private_nft = storage.private_listings;
+        let private_nft_listing = storage.private_listings;
         let isSold = false;
         let mut listing = ListingNote::new(token_id, price, seller, isSold);
-        private_nft.at(seller).insert(&mut listing)
+        private_nft_listing.at(seller).insert(&mut listing)
         .emit(
             encode_and_encrypt_note(&mut context, seller, seller)
         );
@@ -405,7 +405,6 @@ contract NFT {
     fn purchase_listing(seller: AztecAddress, token_id: Field, price: Field) {
         let buyer = context.msg_sender();
         assert(token_id != 0, "zero token ID not supported");
-        // privately_check_timestamp(Comparator.LT, config.deadline, &mut context);
 
         // Find and verify listing
         let notes = storage.private_listings.at(seller).pop_notes(
@@ -423,7 +422,7 @@ contract NFT {
 
         // Handle payment
         let amount = U128::from_integer(price);
-        Token::at(storage.payment_token)
+        Token::at(storage.payment_token.read())
         .transfer_in_private(seller, buyer, amount, 0)
         .call(&mut context);
 
@@ -432,9 +431,12 @@ contract NFT {
         nft.transfer_in_private(seller, buyer, token_id, 0).call(&mut context);
 
         // Update listing as sold
-        // Though
+        // Though it has been removed through pop_notes()
         let mut updated_listing = listing;
         updated_listing.isSold = true;
+        let private_nft_listing = storage.private_listings;
+        private_nft_listing.at(seller).insert(&mut updated_listing);
+
 
         NFT::at(context.this_address())
         ._publish_ownership_changed(buyer, seller, token_id, listing.price)
@@ -445,6 +447,8 @@ contract NFT {
     #[internal]
     fn _publish_ownership_changed(buyer: AztecAddress, seller: AztecAddress, token_id: Field, price: Field) {
         // To Do
+        // Let ownership changes reflect in `public_owners`
+        // storage.public_owners.at(token_id).write(buyer);
         // ListingPurchased { buyer, seller, token_id, price }.emit(encode_event(&mut context))
     }
 
