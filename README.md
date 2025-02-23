@@ -95,5 +95,5 @@ For questions, reach out in the [Issues](../../issues) or on our community Teleg
 
 ### NFT Resources
 
-- [NFT Contract Example](https://docs.aztec.network/tutorials/codealong/contract_tutorials/nft_contract)
+- [NFT Contract Example](https://docs.aztec.network/developers/tutorials/codealong/contract_tutorials/nft_contract)
 - [Outdated - Experimental Private and Non Private NFT Standards](https://github.com/resurgencelabs/nft_standards)
