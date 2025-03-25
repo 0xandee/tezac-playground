@@ -1,6 +1,6 @@
 'use client';
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { FaXmark } from 'react-icons/fa6';
 import { toast } from 'react-toastify';
 
 // Mock data for NFTs
@@ -13,7 +13,8 @@ const mockNFTs = [
         price: '0.45',
         seller: 'Anonymous',
         collection: 'Digital Dreams',
-        type: 'public'
+        type: 'public',
+        purchased: false
     },
     {
         id: 2,
@@ -23,7 +24,8 @@ const mockNFTs = [
         price: '0.32',
         seller: '0x2345...bcde',
         collection: 'Cyber Collective',
-        type: 'public'
+        type: 'public',
+        purchased: false
     },
     {
         id: 3,
@@ -33,7 +35,8 @@ const mockNFTs = [
         price: '0.28',
         seller: 'Anonymous',
         collection: 'Abstract Originals',
-        type: 'public'
+        type: 'public',
+        purchased: false
     },
     {
         id: 4,
@@ -44,7 +47,8 @@ const mockNFTs = [
         seller: '0x4567...defg',
         collection: 'Space Voyagers',
         type: 'private',
-        allowedBuyers: ['0x1234...abcd', 'Your wallet']
+        allowedBuyers: ['0x1234...abcd', 'Your wallet'],
+        purchased: false
     },
     {
         id: 5,
@@ -55,7 +59,8 @@ const mockNFTs = [
         seller: '0x5678...efgh',
         collection: 'Pixel Masters',
         type: 'private',
-        allowedBuyers: ['Your wallet']
+        allowedBuyers: ['Your wallet'],
+        purchased: false
     },
     {
         id: 6,
@@ -66,7 +71,8 @@ const mockNFTs = [
         seller: '0x6789...fghi',
         collection: 'Digital Wilderness',
         type: 'private',
-        allowedBuyers: ['0x1234...abcd', 'Your wallet', '0x3456...cdef']
+        allowedBuyers: ['0x1234...abcd', '0x3456...cdef'],
+        purchased: false
     },
 ];
 
@@ -76,6 +82,12 @@ const Buy: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [activeTab, setActiveTab] = useState('public');
     const [selectedCollection, setSelectedCollection] = useState('');
+
+    const verificationModalRef = useRef<HTMLDialogElement>(null);
+    const [currentNft, setcurrentNft] = useState<any>({});
+
+    // wallet address
+    const mockWalletAddress = 'Your wallet';
 
     // Simulate fetch of NFTs
     useEffect(() => {
@@ -92,15 +104,29 @@ const Buy: React.FC = () => {
         fetchNFTs();
     }, [activeTab]);
 
+
+    // toggle modal
+    const closeVerificationModal = () => verificationModalRef.current?.close();
+    const openVerificationModal = () => verificationModalRef.current?.showModal();
+
     // Handle buy action
     const handleBuy = (id: number, name: string, price: string) => {
-        setIsLoading(true);
+        setcurrentNft({ id, name, price });
+        openVerificationModal();
+    };
 
-        // Simulate API call
-        setTimeout(() => {
-            setIsLoading(false);
-            toast.success(`Successfully purchased ${name} for ${price} ETH!`);
-        }, 0);
+    // handle verification for buying nft
+    const handleBuyVerification = (action: 'confirm' | 'cancel') => {
+        if (action === 'confirm') {
+            // handle verification processes ...
+
+            setNfts(nfts.map((nft) => nft.id === currentNft.id ? { ...nft, purchased: true } : nft))
+            toast.success(`Successfully purchased ${currentNft.name} for ${currentNft.price} ETH!`);
+        }
+        if (action === 'cancel') {
+            toast.success(`Purchase was cancelled`);
+        }
+        closeVerificationModal();
     };
 
     // Filter NFTs based on search term and selected collection
@@ -119,6 +145,184 @@ const Buy: React.FC = () => {
 
     return (
         <div className="form-container" style={{ maxWidth: '1000px' }}>
+            <div>
+                <dialog
+                    ref={verificationModalRef}
+                    onClick={(e) => e.target === e.currentTarget ? closeVerificationModal() : null}
+                    style={{
+                        position: 'fixed',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        padding: '28px',
+                        backgroundColor: '#1a1a1a',
+                        color: '#e0e0e0',
+                        border: '1px solid rgba(255, 255, 255, 0.08)',
+                        borderRadius: '12px',
+                        width: '90%',
+                        maxWidth: '500px',
+                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
+                    }}>
+                    <button
+                        onClick={() => handleBuyVerification('cancel')}
+                        style={{
+                            position: 'absolute',
+                            top: '12px',
+                            right: '12px',
+                            background: 'rgba(255, 255, 255, 0.1)',
+                            border: 'none',
+                            cursor: 'pointer',
+                            fontSize: '18px',
+                            color: '#ffffff',
+                            width: '32px',
+                            height: '32px',
+                            borderRadius: '50%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            transition: 'background 0.2s ease',
+                        }}
+                        onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)')}
+                        onMouseOut={(e) => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)')}>
+                        <FaXmark />
+                    </button>
+                    <form
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '15px',
+                        }}
+                    >
+                        <h3
+                            style={{
+                                borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                                paddingBottom: '12px',
+                                textTransform: 'capitalize',
+                                color: '#ffffff',
+                                fontWeight: '600',
+                                fontSize: '20px',
+                            }}
+                        >
+                            Confirm purchase
+                        </h3>
+                        <div>
+                            <p
+                                style={{
+                                    fontSize: '16px',
+                                    lineHeight: '1.5',
+                                    color: '#e0e0e0',
+                                }}
+                            >
+                                Are you sure you want to proceed with this purchase?
+                            </p>
+                        </div>
+                        <div
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                padding: '16px',
+                                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                                borderRadius: '10px',
+                                border: '1px solid rgba(255, 255, 255, 0.08)',
+                                marginTop: '20px',
+                            }}
+                        >
+                            <div style={{ flex: 1 }}>
+                                <h4 style={{ margin: '0 0 6px 0', color: '#ffffff', fontSize: '18px' }}>
+                                    {currentNft.name}
+                                </h4>
+                                <p
+                                    style={{
+                                        margin: '8px 0 0 0',
+                                        fontWeight: 'bold',
+                                        fontSize: '16px',
+                                        color: '#ffffff',
+                                    }}
+                                >
+                                    <span
+                                        style={{
+                                            backgroundColor: 'rgba(160, 232, 44, 0.1)',
+                                            padding: '4px 10px',
+                                            borderRadius: '6px',
+                                            color: '#a0e82c',
+                                            display: 'inline-block',
+                                        }}
+                                    >
+                                        {currentNft.price} ETH
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                        <div
+                            style={{
+                                marginTop: '20px',
+                                padding: '12px',
+                                borderRadius: '6px',
+                                backgroundColor: 'rgba(255, 87, 87, 0.1)',
+                                border: '1px solid rgba(255, 87, 87, 0.2)',
+                            }}
+                        >
+                            <p
+                                style={{
+                                    margin: 0,
+                                    color: '#ff5757',
+                                    fontSize: '14px',
+                                    lineHeight: '1.5',
+                                }}
+                            >
+                                <strong>Warning:</strong> This purchase is final and cannot be undone. Ensure you want to proceed before confirming.
+                            </p>
+                        </div>
+                        <div
+                            style={{
+                                display: 'flex',
+                                gap: '10px',
+                                justifyContent: 'flex-end',
+                                borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+                                paddingTop: '12px',
+                            }}
+                        >
+                            <button
+                                type="button"
+                                onClick={() => handleBuyVerification('cancel')}
+                                style={{
+                                    padding: '10px 20px',
+                                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                    color: '#ffffff',
+                                    border: 'none',
+                                    borderRadius: '6px',
+                                    cursor: 'pointer',
+                                    fontSize: '16px',
+                                    transition: 'background 0.2s ease',
+                                }}
+                                onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)')}
+                                onMouseOut={(e) => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)')}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => handleBuyVerification('confirm')}
+                                style={{
+                                    padding: '10px 20px',
+                                    backgroundColor: '#a0e82c',
+                                    color: '#1a1a1a',
+                                    border: 'none',
+                                    borderRadius: '6px',
+                                    cursor: 'pointer',
+                                    fontSize: '16px',
+                                    fontWeight: '600',
+                                    transition: 'background 0.2s ease',
+                                }}
+                                onMouseOver={(e) => (e.currentTarget.style.background = '#b6f554')}
+                                onMouseOut={(e) => (e.currentTarget.style.background = '#a0e82c')}
+                            >
+                                Confirm
+                            </button>
+                        </div>
+                    </form>
+                </dialog>
+            </div>
             <div className="page-header">
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '10px', marginBottom: '10px', width: '100%' }}>
                     <h2 className="form-title">
@@ -214,23 +418,64 @@ const Buy: React.FC = () => {
                                                 By {nft.seller}
                                             </div>
                                         </div>
-
-                                        <div style={{ display: 'flex', gap: '10px' }}>
-                                            <button
-                                                className="button-primary"
-                                                style={{ flex: 1 }}
-                                                onClick={() => handleBuy(nft.id, nft.name, nft.price)}
-                                            >
-                                                Public Buy
-                                            </button>
-                                            <button
-                                                className="button-primary"
-                                                style={{ flex: 1 }}
-                                                onClick={() => handleBuy(nft.id, nft.name, nft.price)}
-                                            >
-                                                Private Buy
-                                            </button>
-                                        </div>
+                                        {nft.purchased ? (
+                                            <div style={{
+                                                textAlign: 'center',
+                                                color: '#a0e82c',
+                                                fontWeight: '500',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                gap: '0.5rem',
+                                                padding: '0.75rem 1rem',
+                                                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                                                borderRadius: '6px',
+                                                flex: 1,
+                                            }}>
+                                                Purchased
+                                            </div>
+                                        ) : (
+                                            <div style={{ display: 'flex', gap: '10px' }}>
+                                                {nft.type === 'public' && (
+                                                    <button
+                                                        className="button-primary"
+                                                        style={{ flex: 1 }}
+                                                        onClick={() => handleBuy(nft.id, nft.name, nft.price)}
+                                                    >
+                                                        Public Buy
+                                                    </button>
+                                                )}
+                                                {nft.type === 'private' && nft.allowedBuyers?.includes(mockWalletAddress) && (
+                                                    <button
+                                                        className="button-primary"
+                                                        style={{ flex: 1 }}
+                                                        onClick={() => handleBuy(nft.id, nft.name, nft.price)}
+                                                    >
+                                                        Private Buy
+                                                    </button>)}
+                                                {nft.type === 'private' && !(nft.allowedBuyers?.includes(mockWalletAddress)) && (
+                                                    <div
+                                                        style={{
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            gap: '0.5rem',
+                                                            padding: '0.75rem 1rem',
+                                                            backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                                                            color: '#ff5757',
+                                                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                                                            borderRadius: '6px',
+                                                            cursor: 'not-allowed',
+                                                            fontWeight: '500',
+                                                            flex: 1,
+                                                        }}
+                                                    >
+                                                        Not Available
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             ))}
@@ -248,7 +493,8 @@ const Buy: React.FC = () => {
                     </div>
                 )}
             </div>
-        </div>
+
+        </div >
     );
 };
 

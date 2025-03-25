@@ -56,6 +56,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+
 /* Scrollbar Styles */
 ::-webkit-scrollbar {
   width: 8px;
