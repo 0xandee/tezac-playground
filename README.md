@@ -60,73 +60,15 @@ Tezac builds on Aztec Network's privacy infrastructure with several key componen
 - **Frontend Application**: User-friendly interface with complete wallet integration
 - **Privacy Middleware**: Handles encryption, proof generation, and verification
 
-## Frontend Implementation
-
-Our modern React frontend offers a complete NFT management experience with seven core functionalities:
-
-### Pages and Features
-
-1. **Mint**
-
-   - Create new NFTs with customizable metadata
-   - Upload and store images securely
-   - Set privacy preferences for new assets
-
-2. **Transfer**
-
-   - Private person-to-person transfers
-   - Batch transfer capabilities
-   - Address book for frequent recipients
-
-3. **Listing**
-
-   - Customizable listing parameters including duration and pricing
-   - Reserve price options
-   - Automatic listing expiration handling
-
-4. **Cancel-Listing**
-
-   - Comprehensive view of active listings
-   - One-click cancellation
-   - Listing history and analytics
-
-5. **Buy**
-
-   - Immersive marketplace experience
-   - Advanced filtering and search
-   - Secure purchasing workflow
-
-6. **Verify-Ownership**
-
-   - On-chain verification of NFT ownership
-   - Ownership history timelines
-   - Authenticity validation
-
-7. **Bridge**
-   - Multi-chain asset bridging
-   - Automated fee calculation
-   - Cross-chain transaction monitoring
-
-### Design Specifications
-
-The interface features a sophisticated dark-themed design optimized for both aesthetics and usability:
-
-- **Color Palette**: Dark background (#1A1A1A) with green accent (#a0e82c) for a distinctive look
-- **Typography**: Modern sans-serif fonts for optimal readability
-- **Layout**: Responsive design with sidebar navigation for desktop and optimized mobile views
-- **Interactive Elements**: Subtle animations and transitions enhance user experience
-- **Accessibility**: High contrast elements ensure readability and usability for all users
-
 ## Roadmap
 
 | Phase | Focus                         | Status  |
 | ----- | ----------------------------- | ------- |
 | 1     | Create Private NFT Contracts  | WIP     |
 | 2     | Private Listings & Purchasing | WIP     |
-| 3     | Cross-Chain Trading           | Planned |
-| 4     | Auction Mechanisms            | Planned |
-| 5     | Gaming Integrations           | Future  |
-| 6     | Mobile Applications           | Future  |
+| 3     | Cross-Chain Bridge            | Roadmap |
+| 4     | Cross-Chain Trading           | Roadmap |
+| 5     | Auction Mechanisms            | Roadmap |
 
 ## Development Environment
 
