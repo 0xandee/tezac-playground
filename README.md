@@ -179,7 +179,7 @@ The Sandbox is an Aztec network running fully on your machine, and interacting w
 2. Start the sandbox
 
    ```bash
-      aztec start --sandbox
+   aztec start --sandbox
    ```
 
 3. Using the sandbox test accounts
