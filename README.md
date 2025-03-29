@@ -86,7 +86,7 @@ Tezac builds on Aztec Network's privacy infrastructure with several key componen
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/your-username/tezac.git
+   git clone https://github.com/0xandee/tezac.git
    cd tezac
    ```
 
@@ -150,11 +150,6 @@ The React frontend uses TypeScript for type safety and implements form-based int
    yarn build
    ```
 
-3. **Running Tests**
-   ```bash
-   yarn test:browser
-   ```
-
 ### Contract Development
 
 Our Noir contracts implement privacy-preserving logic for NFT operations:
@@ -171,9 +166,62 @@ Our Noir contracts implement privacy-preserving logic for NFT operations:
    yarn codegen
    ```
 
-3. **Testing Contracts**
+### Aztec Sandbox Basics
+
+The Sandbox is an Aztec network running fully on your machine, and interacting with a development Ethereum node. You can develop and deploy on it just like on a testnet or mainnet.
+
+1. Install the sandbox
+
    ```bash
-   yarn test:node
+   bash -i <(curl -s https://install.aztec.network)
+   ```
+
+2. Start the sandbox
+
+   ```bash
+      aztec start --sandbox
+   ```
+
+3. Using the sandbox test accounts
+
+   ```bash
+   aztec-wallet import-test-accounts
+   ```
+
+4. Creating an account in the sandbox
+
+   ```bash
+   aztec-wallet create-account -a my-wallet --payment method=fee_juice,feePayer=test0
+   ```
+
+5. Deploying a contract
+
+   ```bash
+   aztec-wallet deploy TokenContractArtifact --from accounts:test0 --args accounts:test0 TestToken TST 18 -a testtoken
+   ```
+
+6. Minting public tokens
+
+   ```bash
+   aztec-wallet send mint_to_public --from accounts:test0 --contract-address contracts:testtoken --args accounts:test0 100
+   ```
+
+7. Checks your public account balance
+
+   ```bash
+   aztec-wallet simulate balance_of_public --from test0 --contract-address testtoken --args accounts:test0
+   ```
+
+8. Transfer tokens from public to private state
+
+   ```bash
+   aztec-wallet send transfer_to_private --from accounts:test0 --contract-address testtoken --args accounts:test0 25
+   ```
+
+9. Checking your private account balance
+
+   ```bash
+   aztec-wallet simulate balance_of_private --from test0 --contract-address testtoken --args accounts:test0
    ```
 
 ## Contributing
