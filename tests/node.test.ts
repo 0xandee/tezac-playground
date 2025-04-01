@@ -8,7 +8,7 @@ describe('BoxReact Contract Tests', () => {
   let wallet: AccountWallet;
   let contract: Contract;
   const numberToSet = Fr.random();
-  let accountCompleteAddress: CompleteAddress;z
+  let accountCompleteAddress: CompleteAddress;
 
   beforeAll(async () => {
     wallet = await deployerEnv.getWallet();
