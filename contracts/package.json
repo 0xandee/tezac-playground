@@ -1,0 +1,11 @@
+{
+	"name": "contracts",
+	"packageManager": "yarn@4.8.1",
+	"private": true,
+	"scripts": {
+		"compile": "${AZTEC_NARGO:-aztec-nargo} compile --silence-warnings",
+		"codegen": "${AZTEC_BUILDER:-aztec-builder} codegen ./target -o ./artifacts",
+		"clean": "rm -rf ./dist .tsbuildinfo ./artifacts ./target",
+		"prep": "yarn clean && yarn compile && yarn codegen"
+	}
+}
