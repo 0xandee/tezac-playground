@@ -1,0 +1,51 @@
+{
+	"name": "frontend",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev --turbopack",
+		"build": "next build",
+		"start": "next start",
+		"lint": "next lint",
+		"compile": "cd src/contracts/ && ${AZTEC_NARGO:-aztec-nargo} compile --silence-warnings",
+		"codegen": "cd src/contracts/ && ${AZTEC_BUILDER:-aztec-builder} codegen ./target -o ../artifacts",
+		"clean": "rm -rf ./dist .tsbuildinfo ./artifacts ./src/contracts/target",
+		"prep": "yarn clean && yarn compile && yarn codegen",
+		"deploy": "cd src/contracts/ &&  "
+	},
+	"dependencies": {
+		"@aztec/accounts": "^0.85.0",
+		"@aztec/aztec.js": "^0.85.0",
+		"@aztec/noir-contracts.js": "^0.85.0",
+		"buffer": "^6.0.3",
+		"classnames": "^2.3.2",
+		"formik": "^2.4.3",
+		"next": "15.2.4",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0",
+		"react-icons": "^5.5.0",
+		"react-markdown": "^10.1.0",
+		"react-toastify": "^11.0.5",
+		"yup": "^1.2.0"
+	},
+	"devDependencies": {
+		"@aztec/builder": "^0.85.0",
+		"@aztec/types": "^0.76.4",
+		"@tailwindcss/postcss": "^4.1.3",
+		"@types/node": "^22.14.1",
+		"@types/react": "^19",
+		"@types/react-dom": "^19",
+		"autoprefixer": "^10.4.21",
+		"eslint": "^8.21.0",
+		"eslint-config-prettier": "^9.0.0",
+		"eslint-plugin-prettier": "^5.0.1",
+		"postcss": "^8.5.3",
+		"prettier": "^3.1.1",
+		"tailwindcss": "^4.1.3",
+		"typescript": "^5.8.3"
+	},
+	"packageManager": "yarn@4.9.1",
+	"resolutions": {
+		"c-kzg": "npm:@noble/curves@1.0.0"
+	}
+}

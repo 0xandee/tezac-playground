@@ -10,9 +10,8 @@
 
 <p align="center">
   <a href="#"><img src="https://img.shields.io/badge/Status-WIP-yellow?style=for-the-badge" alt="Status"></a>
-  <a href="#"><img src="https://img.shields.io/badge/Aztec-v0.81.0-blue?style=for-the-badge&logo=Aztec&logoColor=white" alt="Aztec"></a>
-  <a href="#"><img src="https://img.shields.io/badge/Ethereum-3C3C3D?style=for-the-badge&logo=Ethereum&logoColor=white" alt="Ethereum"></a>
-  <a href="https://twitter.com/Tezac_xyz"><img src="https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white" alt="Twitter"></a>
+  <a href="#"><img src="https://img.shields.io/badge/Aztec-v0.84.0-blue?style=for-the-badge&logo=Aztec&logoColor=white" alt="Aztec"></a>
+  <a href="https://x.com/Tezac_xyz"><img src="https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=x&logoColor=white" alt="Twitter"></a>
   <a href="https://t.me/+yhkaIiIZ8-M0MTY1"><img src="https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram"></a>
   <a href="../../issues"><img src="https://img.shields.io/badge/Report_Issue-red?style=for-the-badge&logo=github&logoColor=white" alt="Report Issue"></a>
 </p>
@@ -27,47 +26,47 @@ Tezac revolutionizes NFT trading by leveraging Aztec's zkRollup architecture to 
 
 ### 1. Private NFT Ownership and Trading
 
--   **Encrypted Ownership Records**: All ownership data is fully encrypted on-chain
--   **Private Note Transactions**: Trading occurs through encrypted private notes
--   **Identity Protection**: User identities remain completely obscured during transactions
--   **Metadata Privacy**: Optional encrypted metadata for complete NFT information privacy
+- **Encrypted Ownership Records**: All ownership data is fully encrypted on-chain
+- **Private Note Transactions**: Trading occurs through encrypted private notes
+- **Identity Protection**: User identities remain completely obscured during transactions
+- **Metadata Privacy**: Optional encrypted metadata for complete NFT information privacy
 
 ### 2. Hidden Reserve Prices and Blind Auctions
 
--   **Confidential Reserve Pricing**: Sellers can set reserve prices invisible to buyers
--   **Sealed-Bid Mechanisms**: Participants submit encrypted bids visible only at settlement
--   **Private Auction Results**: Only winning bids are revealed, preserving privacy for all participants
--   **Fair Settlement Guarantees**: Zero-knowledge proofs ensure auction integrity
+- **Confidential Reserve Pricing**: Sellers can set reserve prices invisible to buyers
+- **Sealed-Bid Mechanisms**: Participants submit encrypted bids visible only at settlement
+- **Private Auction Results**: Only winning bids are revealed, preserving privacy for all participants
+- **Fair Settlement Guarantees**: Zero-knowledge proofs ensure auction integrity
 
 ### 3. Cross-Chain NFT Trading
 
--   **Seamless L1 Integration**: Bridge system connects with Ethereum, Polygon, and other major NFT ecosystems
--   **Wrapped NFT Mechanism**: Original NFTs are securely wrapped for privacy-preserving transactions
--   **Cross-Chain Settlement**: Complete trades across different blockchains without sacrificing privacy
--   **Flexible Unwrapping**: Return NFTs to original chains when desired
+- **Seamless L1 Integration**: Bridge system connects with Ethereum, Polygon, and other major NFT ecosystems
+- **Wrapped NFT Mechanism**: Original NFTs are securely wrapped for privacy-preserving transactions
+- **Cross-Chain Settlement**: Complete trades across different blockchains without sacrificing privacy
+- **Flexible Unwrapping**: Return NFTs to original chains when desired
 
 ### 4. Provably Fair NFT Games
 
--   **Verifiable Randomness**: Cryptographically secure randomness for fair outcomes
--   **Private Participation**: Join raffles and lotteries without revealing identity
--   **Transparent Results**: Outcomes verifiable through zero-knowledge proofs
--   **Mystery Box Mechanics**: Implement truly surprising reveals with privacy guarantees
+- **Verifiable Randomness**: Cryptographically secure randomness for fair outcomes
+- **Private Participation**: Join raffles and lotteries without revealing identity
+- **Transparent Results**: Outcomes verifiable through zero-knowledge proofs
+- **Mystery Box Mechanics**: Implement truly surprising reveals with privacy guarantees
 
 ### 5. Front-Running Resistance
 
--   **Time-locked Submissions**: Prevent miners from exploiting pending transactions
--   **Encrypted Orders**: Transaction details remain hidden until settlement
--   **MEV Protection**: Built-in mechanics to prevent maximal extractable value exploitation
--   **Fair Market Access**: Equal opportunity for all participants regardless of network advantages
+- **Time-locked Submissions**: Prevent miners from exploiting pending transactions
+- **Encrypted Orders**: Transaction details remain hidden until settlement
+- **MEV Protection**: Built-in mechanics to prevent maximal extractable value exploitation
+- **Fair Market Access**: Equal opportunity for all participants regardless of network advantages
 
 ## 🔧 Technical Architecture
 
 Tezac builds on Aztec Network's privacy infrastructure with several key components:
 
--   **Smart Contract Layer**: Privacy-preserving Noir contracts handling ownership and transactions
--   **Bridge System**: Cross-chain communication protocol for L1/L2 NFT integration
--   **Frontend Application**: User-friendly interface with complete wallet integration
--   **Privacy Middleware**: Handles encryption, proof generation, and verification
+- **Smart Contract Layer**: Privacy-preserving Noir contracts handling ownership and transactions
+- **Bridge System**: Cross-chain communication protocol for L1/L2 NFT integration
+- **Frontend Application**: User-friendly interface with complete wallet integration
+- **Privacy Middleware**: Handles encryption, proof generation, and verification
 
 ## 📝 Project Roadmap
 
@@ -83,12 +82,12 @@ Tezac builds on Aztec Network's privacy infrastructure with several key componen
 
 ### Prerequisites
 
--   **Docker**: For containerized deployment and testing
--   **Node.js**: >= v18.xx.x and <= v20.17.x (lts/iron)
--   **Yarn**: 4.5.2 for dependency management
--   **Aztec Sandbox**: 0.81.0 for local development
--   **Nargo**: 1.0.0-beta.3 for Noir contract compilation
--   **Noirc**: 1.0.0-beta.3 for zero-knowledge circuit development
+- **Docker**: For containerized deployment and testing
+- **Node.js**: >= v18.xx.x and <= v20.17.x (lts/iron)
+- **Yarn**: 4.6.0 for dependency management
+- **Aztec Sandbox**: 0.84.0 for local development
+- **Nargo**: 1.0.0-beta.3 for Noir contract compilation
+- **Noirc**: 1.0.0-beta.3 for zero-knowledge circuit development
 
 ### Installation
 
@@ -252,41 +251,41 @@ We welcome contributions from the community! To contribute:
 
 ### Contribution Guidelines
 
--   **Code Style**: Follow the project's formatting guidelines
--   **Commit Messages**: Use clear, descriptive commit messages
--   **Documentation**: Update relevant documentation for your changes
--   **Tests**: Add tests for new features or bug fixes
+- **Code Style**: Follow the project's formatting guidelines
+- **Commit Messages**: Use clear, descriptive commit messages
+- **Documentation**: Update relevant documentation for your changes
+- **Tests**: Add tests for new features or bug fixes
 
 ## 🌐 Community and Support
 
--   **Telegram**: Join our community [here](https://t.me/+WI9728WPBOE0N2M1)
--   **Discord**: Coming soon!
--   **Issues**: Report bugs or request features through [GitHub Issues](../../issues)
--   **Twitter**: Follow us for updates [@Tezac_xyz](https://twitter.com/Tezac_xyz)
+- **Telegram**: Join our community [here](https://t.me/+WI9728WPBOE0N2M1)
+- **Discord**: Coming soon!
+- **Issues**: Report bugs or request features through [GitHub Issues](../../issues)
+- **Twitter**: Follow us for updates [@Tezac_xyz](https://twitter.com/Tezac_xyz)
 
 ## 📚 Resources
 
 ### Aztec Protocol Resources
 
--   [Aztec Documentation](https://docs.aztec.network/)
--   [Noir Programming Language](https://noir-lang.org/docs/)
--   [Awesome Aztec](https://github.com/AztecProtocol/awesome-aztec)
--   [Aztec Developer Resources](https://github.com/AztecProtocol/dev-rel)
--   [Aztec Packages](https://github.com/AztecProtocol/aztec-packages)
--   [Aztec Standards by DeFi Wonderland](https://github.com/defi-wonderland/aztec-standards)
+- [Aztec Documentation](https://docs.aztec.network/)
+- [Noir Programming Language](https://noir-lang.org/docs/)
+- [Awesome Aztec](https://github.com/AztecProtocol/awesome-aztec)
+- [Aztec Developer Resources](https://github.com/AztecProtocol/dev-rel)
+- [Aztec Packages](https://github.com/AztecProtocol/aztec-packages)
+- [Aztec Standards by DeFi Wonderland](https://github.com/defi-wonderland/aztec-standards)
 
 ### Educational Materials
 
--   [ZKCamp's Aztec Noir Course](https://github.com/ZKCamp/aztec-noir-course)
--   [Noir Examples](https://github.com/noir-lang/noir-examples)
--   [Introduction to Zero-Knowledge Proofs](https://aztec.network/blog/intro-to-zero-knowledge-proofs)
+- [ZKCamp's Aztec Noir Course](https://github.com/ZKCamp/aztec-noir-course)
+- [Noir Examples](https://github.com/noir-lang/noir-examples)
+- [Introduction to Zero-Knowledge Proofs](https://aztec.network/blog/intro-to-zero-knowledge-proofs)
 
 ### Technical Articles
 
--   [Aztec Network: Zero to One!](https://blog.onlydust.com/aztec-network-zero-to-one/)
--   [Understanding Aztec's Transaction Anatomy](https://aztec.network/blog/aztecs-transaction-anatomy)
--   [Transaction Lifecycle Flow Chart](https://blog.onlydust.com/content/images/size/w1600/2024/04/sandbox_sending_a_tx.png)
--   [Privacy-Preserving NFTs: Technical Challenges](https://docs.aztec.network/developers/tutorials/codealong/contract_tutorials/nft_contract)
+- [Aztec Network: Zero to One!](https://blog.onlydust.com/aztec-network-zero-to-one/)
+- [Understanding Aztec's Transaction Anatomy](https://aztec.network/blog/aztecs-transaction-anatomy)
+- [Transaction Lifecycle Flow Chart](https://blog.onlydust.com/content/images/size/w1600/2024/04/sandbox_sending_a_tx.png)
+- [Privacy-Preserving NFTs: Technical Challenges](https://docs.aztec.network/developers/tutorials/codealong/contract_tutorials/nft_contract)
 
 ## 📄 License
 
