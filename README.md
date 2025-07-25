@@ -279,7 +279,7 @@ We welcome contributions from the community! To contribute:
 
 -   [ZKCamp's Aztec Noir Course](https://github.com/ZKCamp/aztec-noir-course)
 -   [Noir Examples](https://github.com/noir-lang/noir-examples)
--   [Introduction to Zero-Knowledge Proofs](https://aztec.network/blog/intro-to-zero-knowledge-proofs)
+-   [Introduction to Zero-Knowledge Proofs](https://aztec.network/blog/does-zero-knowledge-provide-privacy)
 
 ### Technical Articles
 
